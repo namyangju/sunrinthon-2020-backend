@@ -6,8 +6,8 @@ import { UploadedFile } from 'express-fileupload';
 export default new (class extends C {
   constructor() {
     super();
-    this.router.get('/', C.auth.authority.user, this.getWork);
-    this.router.get('/:workid', C.auth.authority.user, this.getWorkById);
+    this.router.get('/', this.getWork);
+    this.router.get('/:workid', this.getWorkById);
     this.router.get('/user', C.auth.authority.user, this.getWorkByUser);
     this.router.post('/', C.auth.authority.user, this.postWork);
   }
