@@ -1,11 +1,13 @@
 import C from '@lib/blueprint/Controller';
 import Bid from '@models/Bid';
 import User from '@models/User';
+import Work from '@models/Work';
 
 export default new (class extends C {
   constructor() {
     super();
     this.router.get('/', C.auth.authority.user, this.getBid);
+    this.router.get('/:bidid', C.auth.authority.user, this.getBidById);
     this.router.post('/', C.auth.authority.user, this.createBid);
     this.router.post(
       '/participate/:bidid',
@@ -33,6 +35,13 @@ export default new (class extends C {
       .sort('-_id')
       .exec();
     if (!bid.length) throw C.error.db.notfound();
+    res(200, bid);
+  });
+
+  private getBidById = C.Wrapper(async (req, res) => {
+    const { bidid } = req.params;
+    const bid = await Work.findById(bidid).exec();
+    if (!bid) throw C.error.db.notfound();
     res(200, bid);
   });
 
