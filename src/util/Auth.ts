@@ -100,10 +100,12 @@ async function removeExpiredToken(): Promise<number> {
 interface CreateTokenPayload {
   userid: string;
   _id: Schema.Types.ObjectId;
+  nickname: string;
 }
 
 interface TokenPayload {
   userid: string;
+  nickname: string;
   _id: Schema.Types.ObjectId;
   type: string;
   authority: string;
@@ -142,6 +144,7 @@ async function createToken(
     const _payload: TokenPayload = {
       userid: payload.userid,
       _id: payload._id,
+      nickname: payload.nickname,
       type: tokenType,
       authority: user.authority || 'normal',
     };

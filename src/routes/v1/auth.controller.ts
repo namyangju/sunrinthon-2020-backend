@@ -28,6 +28,7 @@ export default new (class extends C {
     const token = await C.auth.token.create.initial({
       _id: user._id,
       userid: user.userid,
+      nickname: user.nickname,
     });
     res(200, { token }, { message: 'Login successful' });
   });
@@ -40,6 +41,7 @@ export default new (class extends C {
       {
         _id: tokenValue._id,
         userid: tokenValue.userid,
+        nickname: tokenValue.nickname,
       },
       'access',
     );
