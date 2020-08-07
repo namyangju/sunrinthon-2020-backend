@@ -1,5 +1,6 @@
 import C from '@lib/blueprint/Controller';
 import Bid from '@models/Bid';
+import User from '@models/User';
 
 export default new (class extends C {
   constructor() {
@@ -56,8 +57,10 @@ export default new (class extends C {
     const bid = await Bid.findByIdAndUpdate(bidid, {
       $set: { selectedUser: worker, status: 'resolved' },
     });
+    const user = await User.findById(worker).exec();
+    if (!user) throw C.error.db.notfound();
     if (!bid) throw C.error.db.notfound();
-    res(200, bid);
+    res(200, { bid, email: user.userid });
   });
 
   private participateBid = C.Wrapper(async (req, res) => {
