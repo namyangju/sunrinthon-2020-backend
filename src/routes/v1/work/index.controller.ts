@@ -12,7 +12,7 @@ export default new (class extends C {
   }
 
   private getWork = C.Wrapper(async (req, res) => {
-    const { skip, limit, search, author } = req.body;
+    const { skip, limit, search, author } = req.query;
     const query = { author };
     if (search) {
       const $regex = new RegExp(
