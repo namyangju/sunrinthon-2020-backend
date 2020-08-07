@@ -34,7 +34,7 @@ export default new (class extends C {
   });
 
   private getWorkByUser = C.Wrapper(async (req, res) => {
-    const { skip, limit } = req.body;
+    const { skip, limit } = req.query;
     const work = await Work.find({ author: req.body.userData._id })
       .skip(C.assets.data.filter(skip as string, 'number') || 0)
       .limit(C.assets.data.filter(limit, 'number') || 10)
