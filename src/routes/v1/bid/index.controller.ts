@@ -40,7 +40,7 @@ export default new (class extends C {
 
   private getBidById = C.Wrapper(async (req, res) => {
     const { bidid } = req.params;
-    const bid = await Work.findById(bidid).exec();
+    const bid = await Bid.findById(bidid).exec();
     if (!bid) throw C.error.db.notfound();
     res(200, bid);
   });
