@@ -7,7 +7,7 @@ export default new (class extends C {
     this.router.get('/', C.auth.authority.user, this.getBid);
     this.router.post('/', C.auth.authority.user, this.createBid);
     this.router.post(
-      '/participate',
+      '/participate/:bidid',
       C.auth.authority.user,
       this.participateBid,
     );
@@ -59,5 +59,15 @@ export default new (class extends C {
     res(200, bid);
   });
 
-  private participateBid = C.Wrapper(async (req, res) => {});
+  private participateBid = C.Wrapper(async (req, res) => {
+    const { bidid } = req.params;
+    const participant = req.body.usertData._id;
+    const legacyBid = await Bid.findById(bidid).exec();
+    if (!legacyBid) throw C.error.db.notfound();
+    if (legacyBid.participant?.indexOf(participant) !== -1)
+      throw C.error.db.exists();
+    legacyBid.participant.push(participant);
+    const newBid = await Bid.findByIdAndUpdate(bidid, { $set: legacyBid });
+    res(200, newBid as any);
+  });
 })();
