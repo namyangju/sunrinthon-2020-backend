@@ -74,7 +74,7 @@ export default new (class extends C {
 
   private participateBid = C.Wrapper(async (req, res) => {
     const { bidid } = req.params;
-    const participant = req.body.usertData._id;
+    const participant = req.body.userData._id;
     const legacyBid = await Bid.findById(bidid).exec();
     if (!legacyBid) throw C.error.db.notfound();
     if (legacyBid.participant?.indexOf(participant) !== -1)
