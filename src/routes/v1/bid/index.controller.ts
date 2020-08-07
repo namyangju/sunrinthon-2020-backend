@@ -6,8 +6,8 @@ import Work from '@models/Work';
 export default new (class extends C {
   constructor() {
     super();
-    this.router.get('/', C.auth.authority.user, this.getBid);
-    this.router.get('/:bidid', C.auth.authority.user, this.getBidById);
+    this.router.get('/', this.getBid);
+    this.router.get('/:bidid', this.getBidById);
     this.router.post('/', C.auth.authority.user, this.createBid);
     this.router.post(
       '/participate/:bidid',
