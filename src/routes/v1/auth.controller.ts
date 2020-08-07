@@ -16,7 +16,7 @@ export default new (class extends C {
     const startTime = Date.now();
     const { userid, password } = req.body;
     C.assets.checkNull(userid, password);
-    const user: any = await User.findOne({ userid }).exec();
+    const user = await User.findOne({ userid }).exec();
     if (!user) {
       await C.assets.delayExact(startTime);
       throw C.error.auth.fail();

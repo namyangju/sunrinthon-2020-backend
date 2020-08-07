@@ -5,6 +5,7 @@ export default new (class extends C {
   constructor() {
     super();
     this.router.all('/', this.getIndex);
+    this.router.get('/kdy', this.getKdy);
   }
 
   private getIndex = C.RawWrapper(async (req, res) => {
@@ -17,5 +18,9 @@ export default new (class extends C {
       },
       { message: 'Welcome to V1 API' },
     );
+  });
+
+  private getKdy = C.RawWrapper(async (req, res) => {
+    res.send('깡');
   });
 })();

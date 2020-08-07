@@ -27,12 +27,14 @@ export default new (class extends C {
   }
 
   private createUser = C.Wrapper(async (req, res) => {
-    const { userid, password } = req.body;
-    C.assets.checkNull(userid, password);
+    const { userid, password, nickname, type } = req.body;
+    C.assets.checkNull(userid, password, nickname, type);
     const hashResult = C.auth.password.create(password);
     const user = await User.create([
       {
         userid,
+        nickname,
+        type,
         ...hashResult,
       },
     ]);
@@ -45,25 +47,21 @@ export default new (class extends C {
     const hashResult = password ? C.auth.password.create(password) : null;
     const user = await User.findByIdAndUpdate(req.body.userData._id, {
       $set: { ...hashResult },
-    })
-      .select('userid authority')
-      .exec();
+    }).exec();
     if (!user) throw C.error.db.notfound();
     res(200, user, { message: 'User data update successful' });
   });
 
   private getUser = C.Wrapper(async (req, res) => {
     const { userData } = req.body;
-    const user = await User.findById(userData._id, 'userid authority').exec();
+    const user = await User.findById(userData._id).exec();
     if (!user) throw C.error.db.notfound();
     res(200, user, { message: 'Data found' });
   });
 
   private deleteUser = C.Wrapper(async (req, res) => {
     const { userData } = req.body;
-    const user = await User.findByIdAndDelete(userData._id, {})
-      .select('userid authority')
-      .exec();
+    const user = await User.findByIdAndDelete(userData._id, {}).exec();
     if (!user) throw C.error.db.notfound();
     res(200, user, { message: 'User removal successful' });
   });

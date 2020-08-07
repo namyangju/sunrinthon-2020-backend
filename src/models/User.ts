@@ -5,7 +5,11 @@ export interface UserInterface {
   userid: string;
   password: string;
   enckey: string;
-  authority: string;
+  authority?: string;
+  nickname: string;
+  type: 'normal' | 'worker' | 'client';
+  photo?: string;
+  description?: string;
 }
 
 const UserSchema = new Schema<UserDocument>({
@@ -13,6 +17,9 @@ const UserSchema = new Schema<UserDocument>({
   password: { type: String, required: true },
   enckey: { type: String, required: true },
   authority: { type: String, default: 'normal' },
+  nickname: { type: String, required: true },
+  type: { type: String, required: true },
+  photo: { type: String, default: '' },
 });
 
 export interface UserDocument extends Document, UserInterface {
@@ -26,11 +33,14 @@ UserSchema.methods.checkUserExists = async function (userid) {
 
 UserSchema.pre('save', function (next: HookNextFunction) {
   const doc = this as UserDocument;
-  models['User'].findOne({ userid: doc.userid }, function (err, user) {
-    if (user) next(error.db.exists() as any);
-    if (err) next(err);
-    next();
-  });
+  models['User'].findOne(
+    { $or: [{ userid: doc.userid }, { nickname: doc.nickname }] },
+    function (err, user) {
+      if (user) next(error.db.exists() as any);
+      if (err) next(err);
+      next();
+    },
+  );
 });
 
 const User = model<UserDocument>('User', UserSchema);

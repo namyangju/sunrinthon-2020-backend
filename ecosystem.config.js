@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: 'your-server-name',
+      name: 'typewriter-server',
       exec_mode: 'cluster',
       instances: 'max',
       script: './dist/index.js',

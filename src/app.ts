@@ -36,7 +36,7 @@ function App(): express.Express {
     }),
   );
   app.use(helmet());
-  app.use(Assets.apiRateLimiter());
+  app.use(Assets.apiRateLimiter()); 
   app.use(Assets.wrapper(ipfilter));
 
   // express-fileupload
