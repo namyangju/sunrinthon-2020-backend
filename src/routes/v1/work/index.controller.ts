@@ -12,8 +12,8 @@ export default new (class extends C {
   }
 
   private getWork = C.Wrapper(async (req, res) => {
-    const { skip, limit, search } = req.body;
-    const query = {};
+    const { skip, limit, search, author } = req.body;
+    const query = { author };
     if (search) {
       const $regex = new RegExp(
         '(' + search.toString().replace(/ /g, '|') + ')',
@@ -23,13 +23,13 @@ export default new (class extends C {
         $or: [{ title: $regex }, { description: $regex }],
       });
     }
-    const work = await Work.find(query)
+    const work = await Work.find(C.assets.updateQueryBuilder(query) || {})
       .skip(C.assets.data.filter(skip as string, 'number') || 0)
       .limit(C.assets.data.filter(limit, 'number') || 10)
       .sort('-_id')
       .exec();
 
-    if (!work) throw C.error.db.notfound();
+    if (!work.length) throw C.error.db.notfound();
     res(200, work);
   });
 
@@ -40,7 +40,7 @@ export default new (class extends C {
       .limit(C.assets.data.filter(limit, 'number') || 10)
       .sort('-_id')
       .exec();
-    if (!work) throw C.error.db.notfound();
+    if (!work.length) throw C.error.db.notfound();
     res(200, work);
   });
 
@@ -62,6 +62,6 @@ export default new (class extends C {
     };
     const work = new Work(data);
     await work.save();
-    res(200, work);
+    res(201, work);
   });
 })();

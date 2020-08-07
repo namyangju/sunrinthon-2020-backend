@@ -7,6 +7,7 @@ export interface RequestInterface {
   worker: string;
   title: string;
   description: string;
+  status?: 'open' | 'closed' | 'declined';
 }
 
 const RequestSchema: Schema = new Schema({
@@ -14,6 +15,7 @@ const RequestSchema: Schema = new Schema({
   worker: { type: Schema.Types.ObjectId, required: true, ref: User },
   title: { type: String, required: true },
   description: { type: String, required: true },
+  status: { type: String, default: 'open' },
 });
 
 export interface RequestDocument extends Document, RequestInterface {

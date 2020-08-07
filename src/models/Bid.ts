@@ -8,6 +8,8 @@ export interface BidInterface {
   price: number;
   user: string;
   participant?: string[];
+  selectedUser?: string;
+  status?: 'waiting' | 'resolved';
 }
 
 const BidSchema: Schema = new Schema({
@@ -15,7 +17,9 @@ const BidSchema: Schema = new Schema({
   description: { type: String, required: true },
   price: { type: Number, required: true },
   user: { type: Schema.Types.ObjectId, required: true, ref: User },
-  participant: { type: [String], default: [] },
+  participant: { type: [Schema.Types.ObjectId], default: [], ref: User },
+  selectedUser: { type: Schema.Types.ObjectId, ref: User },
+  status: { type: String, default: 'waiting' },
 });
 
 export interface BidDocument extends Document, BidInterface {
