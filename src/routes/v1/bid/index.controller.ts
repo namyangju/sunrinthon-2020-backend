@@ -36,13 +36,14 @@ export default new (class extends C {
   });
 
   private createBid = C.Wrapper(async (req, res) => {
-    const { title, description, price } = req.body;
-    C.assets.checkNull(title, description, price);
+    const { title, description, price, phrase } = req.body;
+    C.assets.checkNull(title, description, price, phrase);
     const bid = new Bid({
       title,
       description,
       price,
       user: req.body.userData._id,
+      phrase,
     });
     await bid.save();
     res(201, bid);

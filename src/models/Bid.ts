@@ -5,6 +5,7 @@ import User from '@models/User';
 export interface BidInterface {
   title: string;
   description: string;
+  phrase: string;
   price: number;
   user: string;
   participant?: string[];
@@ -15,6 +16,7 @@ export interface BidInterface {
 const BidSchema: Schema = new Schema({
   title: { type: String, required: true },
   description: { type: String, required: true },
+  phrase: { type: String, required: true },
   price: { type: Number, required: true },
   user: { type: Schema.Types.ObjectId, required: true, ref: User },
   participant: { type: [Schema.Types.ObjectId], default: [], ref: User },
