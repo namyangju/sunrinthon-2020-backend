@@ -11,6 +11,7 @@ export default new (class extends C {
       C.auth.authority.user,
       this.getUser,
     );
+    this.router.get('/:id', this.getUserById);
     this.router.post('/', C.assets.apiRateLimiter(5, 5), this.createUser);
     this.router.patch(
       '/',
@@ -39,6 +40,13 @@ export default new (class extends C {
       },
     ]);
     res(201, user, { message: 'Created user successfully.' });
+  });
+
+  private getUserById = C.Wrapper(async (req, res) => {
+    const { id } = req.params;
+    const user = await User.findById(id).exec();
+    if (!user) throw C.error.db.notfound();
+    res(200, user);
   });
 
   private updateUser = C.Wrapper(async (req, res) => {
